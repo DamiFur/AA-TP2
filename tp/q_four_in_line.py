@@ -1,5 +1,7 @@
 import random
 
+ganadosPorX = 0
+ganadosPorY = 0
 
 class CuatroEnLinea:
     def __init__(self, playerX, playerO):
@@ -17,34 +19,39 @@ class CuatroEnLinea:
                 player, char, other_player = self.playerO, 'O', self.playerX
             if player.breed == "human":
                 self.display_board()
-            space = player.move(self.board.estados) #EsTO HAY QUE CAMBIARLO. ASUMIMOS QUE DEVUELVE NRO del 1 al 7 con la columna
-            if not all([self.board.estados[space-1][x] != ' ' for x in range(6)]): # illegal move
-                player.reward(-99, self.board.estados) # score of shame
+            space = player.move(self.board) #TIENE QUE DEVUELVE NRO del 1 al 7 con la columna
+            if all([self.board.estados[space-1][x] != ' ' for x in range(6)]): # illegal move
+                player.reward(-99, self.board) # score of shame
                 break
             for x in range(6):
                 if self.board.estados[space-1][x] == ' ':
                     self.board.estados[space-1][x] = char
                     break
             if self.player_wins(char): #ESTO TAMBIEN HAY QUE CAMBIARLO
-                player.reward(1, self.board.estados)
-                other_player.reward(-1, self.board.estados)
-                break
+                player.reward(1, self.board)
+                other_player.reward(-1, self.board)
+                print(self.board.estados)
+                print("GANO " + char)
+                return char
             if self.board_full(): # tie game TAMBIEN CAMBIAR!
-                player.reward(0.5, self.board.estados)
-                other_player.reward(0.5, self.board.estados)
-                break
-            other_player.reward(0, self.board.estados)
+                player.reward(0.5, self.board)
+                other_player.reward(0.5, self.board)
+                print("EMPATE")
+                return 'X'
+            other_player.reward(0, self.board)
             self.playerX_turn = not self.playerX_turn
+            
 
     def player_wins(self, char):
 
         inARow = 0
         for x in range(7):
             for y in range(6):
-                if (self.board.estados[y][x] != char):
-                    inARow = 0
-                else:
+                if (self.board.estados[y][x] == char):
+
                     inARow = inARow + 1
+                else:
+                    inARow = 0
 
                 if (inARow == 4):
                     return True
@@ -52,10 +59,10 @@ class CuatroEnLinea:
 
         for y in range(6):
             for x in range(7):
-                if (self.board.estados[y][x] != char):
-                    inARow = 0
-                else:
+                if (self.board.estados[y][x] == char):
                     inARow = inARow + 1
+                else:
+                    inARow = 0
 
                 if (inARow == 4):
                     return True
@@ -94,7 +101,7 @@ class Player(object):
         print "{} rewarded: {}".format(self.breed, value)
 
     def available_moves(self, board):
-        return [i+1 for i in range(0,6) if any([x == ' ' for x in board[i]])]
+        return [i+1 for i in range(0,6) if any([x == ' ' for x in board.estados[i]])]
 
 
 class RandomPlayer(Player):
@@ -222,7 +229,7 @@ class QLearningPlayer(Player):
 
     def move(self, board):
         self.last_board = board
-        actions = self.available_moves(board)
+        actions = self.available_moves(board) #PODRIA ESTAR ACA
 
         if random.random() < self.epsilon: # explore!
             self.last_move = random.choice(actions)
@@ -243,10 +250,9 @@ class QLearningPlayer(Player):
 
     def reward(self, value, board):
         if self.last_move:
-            self.learn(self.last_board, self.last_move, value, tuple(board))
+            self.learn(self.last_board, self.last_move, value, board)
 
     def learn(self, state, action, reward, result_state):
-        print type(state)
         prev = self.getQ(state, action)
         maxqnew = max([self.getQ(result_state, a) for a in self.available_moves(state)])
         self.q[(state, action)] = prev + self.alpha * ((reward + self.gamma*maxqnew) - prev)
@@ -254,7 +260,7 @@ class QLearningPlayer(Player):
 class estado():
 
     def __init__(self):
-        self.estados = [[' ']*7]*6
+        self.estados = [[' ']*7,[' ']*7,[' ']*7,[' ']*7,[' ']*7,[' ']*7]
 
     def __eq__(self, other):
           return other and self.estados == other.estados
@@ -265,19 +271,30 @@ class estado():
     def __hash__(self):
         return hash(str(self.estados))
 
+    def set(self, board):
+        self.estados = board
+
+
 # p1 = RandomPlayer()
 # p1 = MinimaxPlayer()
 # p1 = MinimuddledPlayer()
 p1 = QLearningPlayer()
-p2 = QLearningPlayer()
+p2 = RandomPlayer()
+ptsX = 0
+ptsO = 0
+empates = 0
 
 for i in xrange(0,200000):
     t = CuatroEnLinea(p1, p2)
-    t.play_game()
+    winner = t.play_game()
+    if winner == 'X':
+        ptsX = ptsX + 1
+        print("X: " + str(ptsX))
+    elif winner == 'O':
+        ptsO = ptsO + 1
+        print("O: " + str(ptsO))
+    else:
+        empates = empates + 1
+        print("empates: " + str(empates))
 
-p1 = Player()
-p2.epsilon = 0
-
-while True:
-    t = CuatroEnLinea(p1, p2)
-    t.play_game()
+    print("Termine el juego " + str(i))

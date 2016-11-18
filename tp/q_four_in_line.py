@@ -224,7 +224,7 @@ class QLearningPlayer(Player):
     def getQ(self, state, action):
         # encourage exploration; "optimistic" 1.0 initial values
         if self.q.get((state, action)) is None:
-            self.q[(state, action)] = 1.0
+            self.q[(state, action)] = 0.0
         return self.q.get((state, action))
 
     def move(self, board):

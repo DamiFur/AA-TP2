@@ -1,0 +1,123 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[paper=a4paper]{geometry}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[spanish]{babel}
+
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\usepackage{xcolor}
+\usepackage{listingsutf8}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{multirow}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{relsize}
+\usepackage{epstopdf}
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% set the default code style
+\lstset{
+    frame=tb, % draw a frame at the top and bottom of the code block
+    tabsize=4, % tab space width
+    showstringspaces=false, % don't mark spaces in strings
+    numbers=left, % display line numbers on the left
+    commentstyle=\color{green}, % comment color
+    keywordstyle=\color{blue}, % keyword color
+    stringstyle=\color{red} % string color
+}
+
+% mathy stuff
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposición}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newenvironment{proof}[1][Demostración]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{definition}[1][Definición]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{example}[1][Example]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newcommand{\qed}{\nobreak \ifvmode \relax \else
+      \ifdim\lastskip<1.5em \hskip-\lastskip
+      \hskip1.5em plus0em minus0.5em \fi \nobreak
+      \vrule height0.75em width0.5em depth0.25em\fi}
+
+\title{Aprendizaje Automatico \\ Trabajo Práctico 2 \\ QLearning }
+
+\newcommand{\order}[1]{$\mathcal{O}(#1)$}
+
+\begin{document}
+
+%% cover page
+
+\maketitle
+
+\bigskip
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l l l l|}
+\hline
+Integrante       & \multicolumn{1}{c}{LU}     & Correo electrónico       	& Carrera \\ \hline
+Martin Baigorria & \multicolumn{1}{c}{575/14} & martinbaigorria@gmail.com & computación (licenciatura) \\ 
+Damián Furman & \multicolumn{1}{c}{936/11}& damian.a.furman@gmail.com & computación (licenciatura)\\
+Germán Abrevaya & \multicolumn{1}{c}{-} & germanabrevaya@gmail.com & física (doctorado)\\ \hline
+\end{tabular}
+\end{table}
+
+\vfill
+
+\begin{center}
+\textbf{Reservado para la cátedra}
+\end{center}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+Instancia       & Docente & Nota \\ \hline
+Primera entrega &         &      \\ \hline
+Segunda entrega &         &      \\ \hline
+\end{tabular}
+\end{table}
+
+\newpage
+\tableofcontents
+\newpage
+
+% end cover page
+
+\section{Introducción}
+
+Hablar un poco de QLearning y cadenas de Markov.
+
+Hablar un poco sobre la cantidad de estados posibles que hay en 4 en linea. La cadena de Markov asociada tiene 1 estado por posible configuracion del tablero, y una transicion por cada accion posible a otro estado.
+
+¿Cuál es el espacio de estados?
+¿cuán rápido se puede explorar?
+¿cómo cambia la inicialización de Q con respecto a la velocidad de aprendizaje?
+¿qué importancia tiene la temperatura y la velocidad con que se enfría el sistema si se decide usar la distribution Boltzmann?
+¿qué efecto tiene cambiar la tasa de aprendizaje?
+
+
+Implementar el alpha dinamico, a medida que pasa el tiempo alpha cae. Faltan cosas, pero la base del codigo esta.
+
+Jugar con todos los parametros de los players, y el tablero.
+
+\end{document}

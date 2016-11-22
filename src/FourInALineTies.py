@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 class FourInALine:
 
-    def __init__(self, playerX, playerO, board_width=7, board_height=7, win_reward=1, lose_reward=-1, tie_reward=0.25):
+    def __init__(self, playerX, playerO, board_width=7, board_height=7, win_reward=1, lose_reward=-1, tie_reward=0.5):
         self.playerX, self.playerO = playerX, playerO
         self.playerX_turn = random.choice([True, False])
         self.turns_played = 0;
@@ -290,14 +290,16 @@ def training_performance_experiment(p1, p2, width, height):
     epochs  = []
     p1_wins = []
     p2_wins = []
+    ties = []
 
-    for i in range(0,200000,1000):
+    for i in range(0,100000,1000):
 
         p1.epsilon = 0;
         p1_alpha   = 1;
 
         p1_count = 0
         p2_count = 0
+        ties_count = 0
 
         for j in range(200):
 
@@ -308,44 +310,48 @@ def training_performance_experiment(p1, p2, width, height):
                 p1_count = p1_count + 1
             elif res == 'O':
                 p2_count = p2_count + 1
+            else:
+                ties_count = ties_count + 1
 
         epochs.append(i)
         p1_wins.append(float(p1_count)/200)
         p2_wins.append(float(p2_count)/200)
+        ties.append(float(ties_count)/200)
 
         # # restore parameters
         # p1.epsilon = p1_epsilon
         # p1.alpha   = p1_alpha
 
-    plt.title('Tasa de aciertos en funcion a numero de \n entrenamiento (promedio en ventanas 500 trials), gamma == 0')
+    plt.title('Tasa de aciertos en funcion a numero de \n entrenamiento (promedio en ventanas 500 trials)')
     plt.xlabel('Numero de entrenamiento')
     plt.ylabel('Tasa Victorias')
     plt.ylim([0,1])
     plt.plot(epochs, p1_wins)
     plt.plot(epochs, p2_wins)
+    plt.plot(epochs, ties)
 
     plt.savefig('exp.png')
     plt.show()
 
 
 # board parameters
-width = 6;
-height = 6;
+width = 5;
+height = 5;
 win_reward  = 1
 lose_reward = -1
 tie_reward  = 0.5
 
 # p1 = RandomPlayer()
 epsilon = 0.2
-alpha   = 0.8
-gamma   = 0
+alpha   = 0.2
+gamma   = 0.9
 p1 = QLearningPlayer(epsilon, alpha, gamma)
 #QLearningPlayer(epsilon, alpha, gamma)
 
 epsilon = 0.2
-alpha   = 1
+alpha   = 0.2
 gamma   = 0.9
-p2 = RandomPlayer()
+p2 = QLearningPlayer(epsilon, alpha, gamma)
 
 training_performance_experiment(p1, p2, width, height)
 

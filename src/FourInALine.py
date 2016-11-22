@@ -284,22 +284,36 @@ def training_performance_experiment(p1, p2, width, height, filename):
     # when testing performance, do not train on
     # experiments + follow Q function
     # p1 is Q learner
-    p1_epsilon_save = p1.epsilon
-    p1_alpha_save   = p1.alpha
+
+    if p1.breed == "Qlearner":
+        p1_epsilon_save = p1.epsilon
+        p1_alpha_save   = p1.alpha
+
+    if p2.breed == "Qlearner":
+        p2_epsilon_save = p2.epsilon
+        p2_alpha_save   = p2.alpha
 
     epochs  = []
     p1_wins = []
     p2_wins = []
 
-    for i in range(0,100000,1000):
+    training_jump = 1000;
 
-        p1.epsilon = 1;
-        p1_alpha   = 0;
+    for i in range(0,100000,training_jump):
 
         p1_count = 0
         p2_count = 0
 
         for j in range(500):
+
+            # make sure players do not learn while range testing
+            if p1.breed == "Qlearner":
+                p1.epsilon = 0;
+                p1.alpha   = 0;
+
+            if p2.breed == "Qlearner":
+                p1.epsilon = 0;
+                p1.alpha   = 0;
 
             t = FourInALine(p1, p2, width, height)
             res = t.play_game()
@@ -313,11 +327,21 @@ def training_performance_experiment(p1, p2, width, height, filename):
         p1_wins.append(float(p1_count)/500)
         p2_wins.append(float(p2_count)/500)
 
-        # # restore parameters
-        p1.epsilon = p1_epsilon_save
-        p1.alpha   = p1_alpha_save
+        # restore learning parameters
+        if p1.breed == "Qlearner":
+            p1.epsilon = p1_epsilon_save
+            p1.alpha   = p1_alpha_save
 
-    plt.title('Tasa de aciertos en funcion a numero de \n entrenamiento (promedio en ventanas 500 trials), gamma == 0')
+        if p2.breed == "Qlearner":
+            p2.epsilon = p2_epsilon_save
+            p2.alpha   = p2_alpha_save
+
+        # keep training
+        for _ in range(training_jump):
+            t = FourInALine(p1, p2, width, height)
+            t.play_game()
+
+    plt.title('Tasa de aciertos en funcion a numero de \n entrenamiento (promedio en ventanas 500 trials)')
     plt.xlabel('Numero de entrenamiento')
     plt.ylabel('Tasa Victorias')
     plt.ylim([0,1])
@@ -330,75 +354,70 @@ def training_performance_experiment(p1, p2, width, height, filename):
 
 # Cuidado, ponerle un nombre de experimento diferente a cada experimento para que no se sobreescriban los graficos
 
-tests = [{'exp_name': 'Experimento', 'p1_type': 'QLearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Experimento', 'p1_type': 'QLearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Experimento', 'p1_type': 'QLearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Experimento', 'p1_type': 'QLearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Experimento', 'p1_type': 'QLearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Experimento', 'p1_type': 'QLearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5}]
+# tests = [{'exp_name': 'Experimento', 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# {'exp_name': 'Experimento', 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# {'exp_name': 'Experimento', 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# {'exp_name': 'Experimento', 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# {'exp_name': 'Experimento', 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# {'exp_name': 'Experimento', 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5}]
 
-for test in tests:
+# for test in tests:
 
-    # Player parameters
+#     # Player parameters
+#     if test['p1_type'] == "Qlearner":
+#         epsilon = test['p1_epsilon']
+#         alpha   = test['p1_alpha']
+#         gamma   = test['p1_gamma']
+#         p1 = QLearningPlayer(epsilon, alpha, gamma)
+#     else:
+#         p1 = RandomPlayer()
 
-    epsilon = test['p1_epsilon']
-    alpha   = test['p1_alpha']
-    gamma   = test['p1_gamma']
+#     if test['p2_type'] == "Qlearner":
+#         epsilon = test['p2_epsilon']
+#         alpha   = test['p2_alpha']
+#         gamma   = test['p2_gamma']
+#         p2 = QLearningPlayer(epsilon, alpha, gamma)
+#     else:
+#         p2 = RandomPlayer()
 
-    if test['p1_type'] == 'QLearner':
-        p1 = QLearningPlayer(epsilon, alpha, gamma)
-    else:
-        p1 = RandomPlayer()
+#     # Board parameters
+#     width = test['game_width']
+#     height = test['game_height']
+#     win_reward  = test['win_reward']
+#     lose_reward = test['lose_reward']
+#     tie_reward  = test['tie_reward']
 
-    epsilon = test['p2_epsilon']
-    alpha   = test['p2_alpha']
-    gamma   = test['p2_gamma']
-
-    if test['p2_type'] == 'QLearner':
-        p2 = QLearningPlayer(epsilon, alpha, gamma)
-    else:
-        p2 = RandomPlayer()      
-
-    # Board parameters
-    width = test['game_width']
-    height = test['game_height']
-    win_reward  = test['win_reward']
-    lose_reward = test['lose_reward']
-    tie_reward  = test['tie_reward']
-
-    training_performance_experiment(p1, p2, width, height, test['exp_name'])
+#     training_performance_experiment(p1, p2, width, height, test['exp_name'])
 
 
-# # board parameters
-# width = 6;
-# height = 6;
-# win_reward  = 1
-# lose_reward = -1
-# tie_reward  = 0.5
+# board parameters
+width = 5;
+height = 5;
+win_reward  = 1
+lose_reward = -1
+tie_reward  = 0.5
 
-# # p1 = RandomPlayer()
-# epsilon = 0.2
-# alpha   = 0.8
-# gamma   = 0
-# p1 = QLearningPlayer(epsilon, alpha, gamma)
-# #QLearningPlayer(epsilon, alpha, gamma)
+epsilon = 0.2
+alpha   = 0.8
+gamma   = 0
+p1 = QLearningPlayer(epsilon, alpha, gamma)
 
-# epsilon = 0.2
-# alpha   = 1
-# gamma   = 0.9
-# p2 = RandomPlayer()
+p2 = RandomPlayer()
+epsilon = 0.2
+alpha   = 1
+gamma   = 0.9
 
-# for i in xrange(100000):
-#     t = FourInALine(p1, p2, width, height, win_reward, lose_reward, tie_reward)
-#     t.play_game()
+for i in xrange(100000):
+    t = FourInALine(p1, p2, width, height, win_reward, lose_reward, tie_reward)
+    t.play_game()
 
-# # human against the machine!
-# p1 = Player()
-# p2.epsilon = 0 # no deviating
-# #p2.alpha = 0 # no learning
+# human against the machine!
+p2 = Player()
+p1.epsilon = 0 # no deviating
+p1.alpha = 1 # no learning
 
-# # print p2.q
+# print p2.q
 
-# while True:
-#     t = FourInALine(p1, p2, width, height, win_reward, lose_reward, tie_reward)
-#     t.play_game()
+while True:
+    t = FourInALine(p1, p2, width, height, win_reward, lose_reward, tie_reward)
+    t.play_game()

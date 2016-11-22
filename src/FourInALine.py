@@ -399,7 +399,7 @@ tie_reward  = 0.5
 
 epsilon = 0.2
 alpha   = 0.8
-gamma   = 0
+gamma   = 1
 p1 = QLearningPlayer(epsilon, alpha, gamma)
 
 p2 = RandomPlayer()

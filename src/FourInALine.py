@@ -375,48 +375,48 @@ def training_performance_experiment(p1, p2, width, height, filename, training_cy
 
 # Cuidado, ponerle un nombre de experimento diferente a cada experimento para que no se sobreescriban los graficos
 
-tests = [
-{'exp_name': 'Qlearner_vs_Random', 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 5, 'game_height': 5, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# tests = [
+# {'exp_name': 'Qlearner_vs_Random', 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 5, 'game_height': 5, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
 
-# Qlearner vs Qlearner
-{'exp_name': 'Random_vs_Random', 'training_cycles': 500000, 'p1_type': 'Random', 'p2_type': 'Random', 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Qlearner vs Qlearner', 'training_cycles': 500000, 'p1_type': 'Qlearner', 'p2_type': 'Qlearner', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 5, 'game_height': 5, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# # Qlearner vs Qlearner
+# {'exp_name': 'Random_vs_Random', 'training_cycles': 500000, 'p1_type': 'Random', 'p2_type': 'Random', 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# {'exp_name': 'Qlearner vs Qlearner', 'training_cycles': 500000, 'p1_type': 'Qlearner', 'p2_type': 'Qlearner', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 5, 'game_height': 5, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
 
-# Qlearner vs Random
-{'exp_name': 'Qlearner vs Random (epsilon=0.1)', 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Qlearner vs Random (epsilon=0.3)' , 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# # Qlearner vs Random
+# {'exp_name': 'Qlearner vs Random (epsilon=0.1)', 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+# {'exp_name': 'Qlearner vs Random (epsilon=0.3)' , 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
 
-# Random vs Random
-{'exp_name': 'Random vs Random', 'training_cycles': 500000, 'p1_type': 'Random', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5}
-]
+# # Random vs Random
+# {'exp_name': 'Random vs Random', 'training_cycles': 500000, 'p1_type': 'Random', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5}
+# ]
 
-for test in tests:
+# for test in tests:
 
-    # Player parameters
-    if test['p1_type'] == "Qlearner":
-        epsilon = test['p1_epsilon']
-        alpha   = test['p1_alpha']
-        gamma   = test['p1_gamma']
-        p1 = QLearningPlayer(epsilon, alpha, gamma)
-    else:
-        p1 = RandomPlayer()
+#     # Player parameters
+#     if test['p1_type'] == "Qlearner":
+#         epsilon = test['p1_epsilon']
+#         alpha   = test['p1_alpha']
+#         gamma   = test['p1_gamma']
+#         p1 = QLearningPlayer(epsilon, alpha, gamma)
+#     else:
+#         p1 = RandomPlayer()
 
-    if test['p2_type'] == "Qlearner":
-        epsilon = test['p2_epsilon']
-        alpha   = test['p2_alpha']
-        gamma   = test['p2_gamma']
-        p2 = QLearningPlayer(epsilon, alpha, gamma)
-    else:
-        p2 = RandomPlayer()
+#     if test['p2_type'] == "Qlearner":
+#         epsilon = test['p2_epsilon']
+#         alpha   = test['p2_alpha']
+#         gamma   = test['p2_gamma']
+#         p2 = QLearningPlayer(epsilon, alpha, gamma)
+#     else:
+#         p2 = RandomPlayer()
 
-    # Board parameters
-    width = test['game_width']
-    height = test['game_height']
-    win_reward  = test['win_reward']
-    lose_reward = test['lose_reward']
-    tie_reward  = test['tie_reward']
+#     # Board parameters
+#     width = test['game_width']
+#     height = test['game_height']
+#     win_reward  = test['win_reward']
+#     lose_reward = test['lose_reward']
+#     tie_reward  = test['tie_reward']
 
-    training_performance_experiment(p1, p2, width, height, test['exp_name'], test['training_cycles'])
+#     training_performance_experiment(p1, p2, width, height, test['exp_name'], test['training_cycles'])
 
 
 # test = tests[1]
@@ -489,35 +489,35 @@ for test in tests:
 #     plt.savefig(filename + '.png')
 #     plt.show()
 
-# # board parameters
-# width = 4;
-# height = 4;
-# win_reward  = 100
-# lose_reward = -1
-# tie_reward  = 0.5
+# board parameters
+width = 6;
+height = 6;
+win_reward  = 100
+lose_reward = -1
+tie_reward  = 0.5
 
-# epsilon = 0.2
-# alpha   = 0.8
-# gamma   = 1
-# p1 = QLearningPlayer(epsilon, alpha, gamma)
+epsilon = 0.2
+alpha   = 0.8
+gamma   = 1
+p1 = QLearningPlayer(epsilon, alpha, gamma)
 
-# p2 = RandomPlayer()
-# epsilon = 0.2
-# alpha   = 1
-# gamma   = 0.9
-# p2 = QLearningPlayer(epsilon, alpha, gamma)
+p2 = RandomPlayer()
+epsilon = 0.2
+alpha   = 1
+gamma   = 0.9
+p2 = QLearningPlayer(epsilon, alpha, gamma)
 
-# for i in xrange(100000):
-#     t = FourInALine(p1, p2, width, height, win_reward, lose_reward, tie_reward)
-#     t.play_game()
+for i in xrange(500000):
+    t = FourInALine(p1, p2, width, height, win_reward, lose_reward, tie_reward)
+    t.play_game()
 
-# # human against the machine!
-# p2 = Player()
-# p1.epsilon = 0 # no deviating
-# p1.alpha = 1 # no learning
+# human against the machine!
+p2 = Player()
+p1.epsilon = 0 # no deviating
+p1.alpha = 1 # no learning
 
-# # print p2.q
+# print p2.q
 
-# while True:
-#     t = FourInALine(p1, p2, width, height, win_reward, lose_reward, tie_reward)
-#     t.play_game()
+while True:
+    t = FourInALine(p1, p2, width, height, win_reward, lose_reward, tie_reward)
+    t.play_game()

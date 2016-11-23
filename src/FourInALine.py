@@ -298,6 +298,7 @@ def training_performance_experiment(p1, p2, width, height, filename, training_cy
     epochs  = []
     p1_wins = []
     p2_wins = []
+    draws   = []
 
     training_jump = 500;
 
@@ -328,6 +329,7 @@ def training_performance_experiment(p1, p2, width, height, filename, training_cy
         epochs.append(i)
         p1_wins.append(float(p1_count)/500)
         p2_wins.append(float(p2_count)/500)
+        draws.append(1-(float(p1_count)+float(p2_count))/500)
 
         # restore learning parameters
         if p1.breed == "Qlearner":
@@ -343,33 +345,49 @@ def training_performance_experiment(p1, p2, width, height, filename, training_cy
             t = FourInALine(p1, p2, width, height)
             t.play_game()
 
+        if i % 50000 == 0 and i != 0:
+
+            plt.figure()
+            plt.title('Tasa de aciertos en funcion a numero de \n entrenamiento (promedio en ventanas 500 trials)')
+            plt.xlabel('Numero de entrenamiento')
+            plt.ylabel('Tasa Victorias')
+            plt.ylim([0,1])
+            plt.plot(epochs, p1_wins)
+            plt.plot(epochs, p2_wins)
+            plt.plot(epochs, draws)           
+            plt.savefig(filename + ' ' + str(i) + '.png')
+            plt.show()
+
+    plt.figure()
     plt.title('Tasa de aciertos en funcion a numero de \n entrenamiento (promedio en ventanas 500 trials)')
     plt.xlabel('Numero de entrenamiento')
     plt.ylabel('Tasa Victorias')
     plt.ylim([0,1])
     plt.plot(epochs, p1_wins)
     plt.plot(epochs, p2_wins)
+    plt.plot(epochs, draws) 
 
     plt.savefig(filename + '.png')
     plt.show()
 
+    return {'epochs': epochs, 'p1': p1_wins, 'p2': p2_wins, 'draws': draws}
+    # return (p1_wins, p2_wins, draws)
 
 # Cuidado, ponerle un nombre de experimento diferente a cada experimento para que no se sobreescriban los graficos
 
 tests = [
+{'exp_name': 'Qlearner_vs_Random', 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 5, 'game_height': 5, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+
 # Qlearner vs Qlearner
-{'exp_name': 'Qlearner vs Random', 'training_cycles': 50000, 'p1_type': 'Qlearner', 'p2_type': 'Qlearner', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 1, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 1, 'game_width': 7, 'game_height': 7, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Qlearner vs Random', 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Qlearner', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 1, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 1, 'game_width': 7, 'game_height': 7, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Qlearner vs Random', 'training_cycles': 500000, 'p1_type': 'Qlearner', 'p2_type': 'Qlearner', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 1, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 1, 'game_width': 7, 'game_height': 7, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Qlearner vs Random', 'training_cycles': 1000000, 'p1_type': 'Qlearner', 'p2_type': 'Qlearner', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 1, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 1, 'game_width': 7, 'game_height': 7, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+{'exp_name': 'Random_vs_Random', 'training_cycles': 500000, 'p1_type': 'Random', 'p2_type': 'Random', 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+{'exp_name': 'Qlearner vs Qlearner', 'training_cycles': 500000, 'p1_type': 'Qlearner', 'p2_type': 'Qlearner', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 5, 'game_height': 5, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
 
 # Qlearner vs Random
-{'exp_name': 'Qlearner vs Random', 'training_cycles': 30000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 1, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 1, 'game_width': 7, 'game_height': 7, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Qlearner vs Random', 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 1, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 1, 'game_width': 7, 'game_height': 7, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
-{'exp_name': 'Qlearner vs Random', 'training_cycles': 500000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 1, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 1, 'game_width': 7, 'game_height': 7, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+{'exp_name': 'Qlearner vs Random (epsilon=0.1)', 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
+{'exp_name': 'Qlearner vs Random (epsilon=0.3)' , 'training_cycles': 100000, 'p1_type': 'Qlearner', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5},
 
 # Random vs Random
-{'exp_name': 'Random vs Random', 'training_cycles': 10^5, 'p1_type': 'Random', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 1, 'game_width': 7, 'game_height': 7, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5}
+{'exp_name': 'Random vs Random', 'training_cycles': 500000, 'p1_type': 'Random', 'p2_type': 'Random', 'p1_epsilon': 0.2, 'p1_alpha': 0.8, 'p1_gamma': 0.9, 'p2_epsilon': 0.2, 'p2_alpha': 0.8, 'p2_gamma': 0.9, 'game_width': 6, 'game_height': 6, 'win_reward': 1, 'lose_reward': -1, 'tie_reward': 0.5}
 ]
 
 for test in tests:
@@ -400,6 +418,76 @@ for test in tests:
 
     training_performance_experiment(p1, p2, width, height, test['exp_name'], test['training_cycles'])
 
+
+# test = tests[1]
+
+# # Player parameters
+# if test['p1_type'] == "Qlearner":
+#     epsilon = test['p1_epsilon']
+#     alpha   = test['p1_alpha']
+#     gamma   = test['p1_gamma']
+#     p1 = QLearningPlayer(epsilon, alpha, gamma)
+# else:
+#     p1 = RandomPlayer()
+
+# if test['p2_type'] == "Qlearner":
+#     epsilon = test['p2_epsilon']
+#     alpha   = test['p2_alpha']
+#     gamma   = test['p2_gamma']
+#     p2 = QLearningPlayer(epsilon, alpha, gamma)
+# else:
+#     p2 = RandomPlayer()
+
+# # Board parameters
+# width = test['game_width']
+# height = test['game_height']
+# win_reward  = test['win_reward']
+# lose_reward = test['lose_reward']
+# tie_reward  = test['tie_reward']
+
+# epsilon_low = training_performance_experiment(p1, p2, width, height, test['exp_name'], test['training_cycles'])
+
+# test = tests[2]
+
+# # Player parameters
+# if test['p1_type'] == "Qlearner":
+#     epsilon = test['p1_epsilon']
+#     alpha   = test['p1_alpha']
+#     gamma   = test['p1_gamma']
+#     p1 = QLearningPlayer(epsilon, alpha, gamma)
+# else:
+#     p1 = RandomPlayer()
+
+# if test['p2_type'] == "Qlearner":
+#     epsilon = test['p2_epsilon']
+#     alpha   = test['p2_alpha']
+#     gamma   = test['p2_gamma']
+#     p2 = QLearningPlayer(epsilon, alpha, gamma)
+# else:
+#     p2 = RandomPlayer()
+
+# # Board parameters
+# width = test['game_width']
+# height = test['game_height']
+# win_reward  = test['win_reward']
+# lose_reward = test['lose_reward']
+# tie_reward  = test['tie_reward']
+
+# epsilon_high = training_performance_experiment(p1, p2, width, height, test['exp_name'], test['training_cycles'])
+
+# def comparing_epsilons(epsilon_low, epsilon_high):
+#     plt.figure()
+#     plt.title('Tasa de aciertos en funcion a numero de \n entrenamiento (promedio en ventanas 500 trials)')
+#     plt.xlabel('Numero de entrenamiento')
+#     plt.ylabel('Tasa Victorias')
+#     plt.ylim([0,1])
+#     plt.plot(epochs, epsilon_low['p1'])
+#     plt.plot(epochs, epsilon_low['p2'])
+#     plt.plot(epochs, epsilon_high['p1'])
+#     plt.plot(epochs, epsilon_high['p2'])
+
+#     plt.savefig(filename + '.png')
+#     plt.show()
 
 # # board parameters
 # width = 4;
